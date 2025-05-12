@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import pandas as pd
 from sqlalchemy import create_engine
@@ -20,16 +20,16 @@ default_args = {
 dag = DAG(
     'ads_data_ingestion',
     default_args=default_args,
-    description='Ingest ads data into PostgreSQL',
+    description='Ingest Ads Data into PostgreSQL',
     schedule_interval='@daily',
 )
 
 # Data ingestion function
 def ingest_data():
     # Load the dataset from CSV
-    file_path = '/opt/airflow/dags/ads_optimization_dataset.csv'
+    file_path = '/opt/airflow/dags/data.csv'  # Path inside Docker container
     df = pd.read_csv(file_path)
-    
+
     # Connect to PostgreSQL
     engine = create_engine(DATABASE_URI)
     connection = engine.connect()
